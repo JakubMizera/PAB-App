@@ -1,17 +1,15 @@
-import { Router, Response, Request } from "express";
-import { User } from "./user.model";
+import { Router, Response, Request, NextFunction } from "express";
+import { Users, UserWithId } from "./user.model";
 
 const router = Router();
 
-router.get('/', (req: Request, res: Response<User[]>) => {
-    res.json([{
-        userName: 'fakeUsername',
-        firstName: 'Jakub',
-        surName: 'Mizera',
-        email: 'fakemail@gmail.com',
-        phoneNumber: 555777999,
-        country: 'Poland'
-    }])
+router.get('/', async (req: Request, res: Response<UserWithId[]>, next: NextFunction) => {
+    try {
+        const users = await Users.find().toArray();
+        res.json(users);
+    } catch (error) {
+        next(error);
+    }
 });
 
 export default router;

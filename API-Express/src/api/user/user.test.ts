@@ -1,7 +1,15 @@
 import request from 'supertest';
 import app from '../../app';
+import { Users } from './user.model';
 
+// Dropping database before running tests
+beforeAll(async () => {
+    try {
+        await Users.drop();
+    } catch (error) { }
+})
 
+//schema for some basic test with jest
 describe('GET /api/user', () => {
     it('responds with an array of users', async () => {
         request(app)
@@ -11,9 +19,7 @@ describe('GET /api/user', () => {
             .expect(200)
             .then((response) => {
                 expect(response.body).toHaveProperty('length');
-                expect(response.body.length).toBe(1);
-                expect(response.body[0]).toHaveProperty('userName');
-                expect(response.body[0]).toHaveProperty('firstName'); 
+                expect(response.body.length).toBe(0);
             });
     });
 });
