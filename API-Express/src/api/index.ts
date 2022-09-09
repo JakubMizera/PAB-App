@@ -1,7 +1,6 @@
 import express from 'express';
-
 import MessageResponse from '../interfaces/MessageResponse';
-
+import users from './user/user.routes';
 
 const router = express.Router();
 
@@ -11,5 +10,6 @@ router.get<{}, MessageResponse>('/', (req, res) => {
   });
 });
 
+router.use('/user', users);
 
 export default router;
