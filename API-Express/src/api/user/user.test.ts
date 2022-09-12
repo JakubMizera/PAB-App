@@ -64,6 +64,12 @@ describe('POST /api/user', () => {
                 expect(response.body.firstName).toBe('Jakub');
                 expect(response.body).toHaveProperty('surName');
                 expect(response.body.surName).toBe('Mizera');
+                expect(response.body).toHaveProperty('email');
+                expect(response.body.email).toBe('testmail@gmail.com');
+                expect(response.body).toHaveProperty('phoneNumber');
+                expect(response.body.phoneNumber).toBe(123456789);
+                expect(response.body).toHaveProperty('country');
+                expect(response.body.country).toBe('Poland');
             }),
     );
 });
