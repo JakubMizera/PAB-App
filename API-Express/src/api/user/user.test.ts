@@ -26,7 +26,7 @@ describe('GET /api/user', () => {
 
 let id = '';
 describe('POST /api/user', () => {
-    it('responds with an error if the todo is invalid', async () =>
+    it('responds with an error if the user is invalid', async () =>
         request(app)
             .post('/api/user')
             .set('Accept', 'application/json')
@@ -71,4 +71,45 @@ describe('POST /api/user', () => {
                 expect(response.body.country).toBe('Poland');
             }),
     );
+});
+
+// Test for finding user by ID
+describe('GET /api/user/:id', () => {
+    it('responds with user object', async () => {
+        request(app)
+            .get(`/api/user/${id}`)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((response) => {
+                expect(response.body).toHaveProperty('_id');
+                expect(response.body._id).toBe(id);
+                expect(response.body).toHaveProperty('userName');
+                expect(response.body.userName).toBe('TestUserName');
+                expect(response.body).toHaveProperty('firstName');
+                expect(response.body.firstName).toBe('Jakub');
+                expect(response.body).toHaveProperty('surName');
+                expect(response.body.surName).toBe('Mizera');
+                expect(response.body).toHaveProperty('email');
+                expect(response.body.email).toBe('testmail@gmail.com');
+                expect(response.body).toHaveProperty('phoneNumber');
+                expect(response.body.phoneNumber).toBe(123456789);
+                expect(response.body).toHaveProperty('country');
+                expect(response.body.country).toBe('Poland');
+            });
+    });
+    it('responds with an invalid ObjectId error', (done) => {
+        request(app)
+            .get(`/api/user/invalidObjectIdhere`)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(422, done)
+    });
+    it('responds with a not found error', (done) => {
+        request(app)
+            .get('/api/v1/todos/6306d061477bdb46f9c57fa4')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(404, done);
+    });
 });

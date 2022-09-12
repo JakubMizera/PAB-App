@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import { UserWithId, Users, User } from "./user.model";
-import { InsertOneResult } from "mongodb";
-import { ZodError } from "zod";
+import { ParamsWithId } from "../../interfaces/ParamsWithId";
+import { ObjectId } from "mongodb";
 
 
 export async function findAll(req: Request, res: Response<UserWithId[]>, next: NextFunction) {
@@ -28,3 +28,20 @@ export async function createOne(req: Request<{}, UserWithId, User>, res: Respons
         next(error);
     }
 }
+
+export async function findOne(req: Request<ParamsWithId, UserWithId, {}>, res: Response<UserWithId>, next: NextFunction) {
+    try {
+        const result = await Users.findOne({
+            //ObjectId from mongodb to avoid type errors
+            _id: new ObjectId(req.params.id),
+        });
+        //if statment when user id is not found
+        if (!result) {
+            res.status(404);
+            throw new Error(`User with id ${req.params.id} not found`);
+        }
+        res.json(result);
+    } catch (error) {
+
+    }
+};
