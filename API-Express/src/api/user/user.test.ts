@@ -23,3 +23,47 @@ describe('GET /api/user', () => {
             });
     });
 });
+
+let id = '';
+describe('POST /api/user', () => {
+    // it('responds with an error if the todo is invalid', async () =>
+    //     request(app)
+    //         .post('/api/user')
+    //         .set('Accept', 'application/json')
+    //         .send({
+    //             userName: '',
+    //         })
+    //         .expect('Content-Type', /json/)
+    //         .expect(422)
+    //         .then((response) => {
+    //             expect(response.body).toHaveProperty('message');
+    //         }),
+    // );
+    it('responds with an inserted object', async () =>
+        request(app)
+            .post('/api/user')
+            .set('Accept', 'application/json')
+            .send({
+                userName: 'TestUserName',
+                firstName: 'Jakub',
+                surName: 'Mizera',
+                email: 'testmail@gmail.com',
+                phoneNumber: 123456789,
+                country: 'Poland'
+            })
+            .expect('Content-Type', /json/)
+            .expect(201)
+            .then((response) => {
+                console.log(response.body)
+                expect(response.body).toHaveProperty('_id');
+                id = response.body._id;
+                //console.log(id)
+                expect(response.body).toHaveProperty('userName');
+                expect(response.body.userName).toBe('TestUserName');
+                expect(response.body).toHaveProperty('firstName');
+                expect(response.body.firstName).toBe('Jakub');
+                expect(response.body).toHaveProperty('surName');
+                expect(response.body.surName).toBe('Mizera');
+            }),
+    );
+});
