@@ -9,7 +9,7 @@ export const User = z.object({
     firstName: z.string().min(1),
     surName: z.string().min(3),
     email: z.string().min(5).email(),
-    phoneNumber: z.number(),
+    phoneNumber: z.number().int(),
     country: z.string(),
 });
 
