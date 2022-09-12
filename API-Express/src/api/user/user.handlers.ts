@@ -25,9 +25,6 @@ export async function createOne(req: Request<{}, UserWithId, User>, res: Respons
             ...req.body,
         });
     } catch (error) {
-        if (error instanceof ZodError) {
-            res.status(422);
-        }
         next(error);
     }
 }

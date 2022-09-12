@@ -8,8 +8,8 @@ export const User = z.object({
     userName: z.string().min(3),
     firstName: z.string().min(1),
     surName: z.string().min(3),
-    email: z.string().min(5),
-    phoneNumber: z.number().min(9).max(9),
+    email: z.string().min(5).email(),
+    phoneNumber: z.number(),
     country: z.string(),
 });
 
