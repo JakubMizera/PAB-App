@@ -45,3 +45,25 @@ export async function findOne(req: Request<ParamsWithId, UserWithId, {}>, res: R
 
     }
 };
+
+export async function updateOne(req: Request<ParamsWithId, UserWithId, User>, res: Response<UserWithId>, next: NextFunction) {
+    try {
+        const result = await Users.findOneAndUpdate({
+            _id: new ObjectId(req.params.id),
+        }, {
+            //$set: req.body updates user info
+            $set: req.body,
+        }, {
+            //When set to 'after', return updated document rather than the original
+            returnDocument: 'after',
+        });
+        // result.value is updated object (if it exists)
+        if (!result.value) {
+            res.status(404);
+            throw new Error(`User with id ${req.params.id} not found`);
+        }
+        res.json(result.value);
+    } catch (error) {
+        next(error);
+    }
+};

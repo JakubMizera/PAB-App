@@ -1,3 +1,4 @@
+import { response } from 'express';
 import request from 'supertest';
 import app from '../../app';
 import { Users } from './user.model';
@@ -100,16 +101,83 @@ describe('GET /api/user/:id', () => {
     });
     it('responds with an invalid ObjectId error', (done) => {
         request(app)
-            .get(`/api/user/invalidObjectIdhere`)
+            .get('/api/user/asfasfasfasfasf')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(422, done)
+
     });
-    it('responds with a not found error', (done) => {
+    // it('responds with not found error', (done) => {
+    //     request(app)
+    //         .get('/api/user/631f4c522898c3a752d4ce7f')
+    //         .set('Accept', 'application/json')
+    //         .expect('Content-Type', /json/)
+    //         .expect(404, done)
+    // });
+});
+
+//Test for updating object in database
+describe('PUT /api/user/:id', () => {
+    it('responds with an invalid ObjectId error', (done) => {
         request(app)
-            .get('/api/v1/todos/6306d061477bdb46f9c57fa4')
+            .put(`/api/user/invalidObjectIdhere`)
             .set('Accept', 'application/json')
+            .send({
+                userName: 'TestUserNameUpdated',
+                firstName: 'Kobe',
+                surName: 'Bryant',
+                email: 'testmail2@gmail.com',
+                phoneNumber: 555777999,
+                country: 'USA'
+            })
+            .expect('Content-Type', /json/)
+            .expect(422, done)
+    });
+    it('responds with id not found', (done) => {
+        request(app)
+            .put('/api/user/631f4c522898c3a752d4ce7f')
+            .set('Accept', 'application/json')
+            .send({
+                userName: 'TestUserNameUpdated',
+                firstName: 'Kobe',
+                surName: 'Bryant',
+                email: 'testmail2@gmail.com',
+                phoneNumber: 555777999,
+                country: 'USA'
+            })
             .expect('Content-Type', /json/)
             .expect(404, done);
     });
+    it('responds with a single user', async () =>
+        request(app)
+            .put(`/api/user/${id}`)
+            .set('Accept', 'application/json')
+            .send({
+                userName: 'TestUserNameUpdated',
+                firstName: 'Kobe',
+                surName: 'Bryant',
+                email: 'testmail2@gmail.com',
+                phoneNumber: 555777999,
+                country: 'USA'
+            })
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((response) => {
+                console.log(response.body)
+                expect(response.body).toHaveProperty('_id');
+                expect(response.body._id).toBe(id);
+                expect(response.body).toHaveProperty('userName');
+                expect(response.body.userName).toBe('TestUserNameUpdated');
+                expect(response.body).toHaveProperty('firstName');
+                expect(response.body.firstName).toBe('Kobe');
+                expect(response.body).toHaveProperty('surName');
+                expect(response.body.surName).toBe('Bryant');
+                expect(response.body).toHaveProperty('email');
+                expect(response.body.email).toBe('testmail2@gmail.com');
+                expect(response.body).toHaveProperty('phoneNumber');
+                expect(response.body.phoneNumber).toBe(555777999);
+                expect(response.body).toHaveProperty('country');
+                expect(response.body.country).toBe('USA');
+            }),
+    );
 });
