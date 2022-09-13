@@ -195,7 +195,7 @@ describe('DELETE /api/user/:id', () => {
         request(app)
             .delete('/api/user/631f4c522898c3a752d4ce7f')
             .set('Accept', 'application/json')
-            //.expect('Content-Type', /json/)
+            .expect('Content-Type', /json/)
             .expect(404, done);
     });
     it('responds with a single user', (done) => {
