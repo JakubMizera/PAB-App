@@ -11,5 +11,6 @@ router.get('/', UserHandlers.findAll);
 router.post('/', validateRequest({ body: User, }), UserHandlers.createOne);
 router.get('/:id', validateRequest({ params: ParamsWithId }), UserHandlers.findOne);
 router.put('/:id', validateRequest({ params: ParamsWithId, body: User }), UserHandlers.updateOne);
+router.delete('/:id', validateRequest({ params: ParamsWithId }), UserHandlers.deleteOne);
 
 export default router;

@@ -99,21 +99,20 @@ describe('GET /api/user/:id', () => {
                 expect(response.body.country).toBe('Poland');
             });
     });
-    it('responds with an invalid ObjectId error', (done) => {
+    it('responds with an invalid ObjectId error', async () => {
         request(app)
             .get('/api/user/asfasfasfasfasf')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(422, done)
-
+            .expect(422)
     });
-    // it('responds with not found error', (done) => {
-    //     request(app)
-    //         .get('/api/user/631f4c522898c3a752d4ce7f')
-    //         .set('Accept', 'application/json')
-    //         .expect('Content-Type', /json/)
-    //         .expect(404, done)
-    // });
+    it('responds with not found error', async () => {
+        request(app)
+            .get('/api/user/631f4c522898c3a752d4ce7f')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(404)
+    });
 });
 
 //Test for updating object in database
@@ -180,4 +179,35 @@ describe('PUT /api/user/:id', () => {
                 expect(response.body.country).toBe('USA');
             }),
     );
+});
+
+// Tests for deleting user
+
+describe('DELETE /api/user/:id', () => {
+    it('responds with an invalid ObjectId error', (done) => {
+        request(app)
+            .delete(`/api/user/invalidObjectIdhere`)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(422, done)
+    });
+    it('responds with id not found', (done) => {
+        request(app)
+            .delete('/api/user/631f4c522898c3a752d4ce7f')
+            .set('Accept', 'application/json')
+            //.expect('Content-Type', /json/)
+            .expect(404, done);
+    });
+    it('responds with a single user', (done) => {
+        request(app)
+            .delete(`/api/user/${id}`)
+            .expect(204, done)
+    });
+    it('responds with id not found', (done) => {
+        request(app)
+            .delete(`/api/user/${id}`)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(404, done);
+    });
 });
